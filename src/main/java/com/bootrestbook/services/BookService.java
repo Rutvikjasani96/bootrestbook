@@ -2,9 +2,13 @@ package com.bootrestbook.services;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
+import org.apache.catalina.connector.Response;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 import com.bootrestbook.etities.Book;
@@ -29,7 +33,13 @@ public class BookService {
 
     // Find any one Book by Id
     public Book getBookbyId(int id) {
-        Book book = booksList.stream().filter(bk -> bk.getId() == id).findFirst().get();
+        Book book = null;
+        try {
+            book = booksList.stream().filter(bk -> bk.getId() == id).findFirst().get();
+        } catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+        }
         return book;
     }
 
@@ -40,15 +50,16 @@ public class BookService {
     }
 
     // Delete Book
-    public void deleteBook(int deleteId) {
+    public Book deleteBook(int deleteId) {
         booksList = booksList.stream().filter(book -> book.getId() != deleteId).collect(Collectors.toList());
+        return book;
     }
 
     // update Book
-    public Book updateBook(Book book,int updateId){
-        booksList = booksList.stream().map(bk->{
-            if(bk.getId()==updateId){
-                bk=book;
+    public Book updateBook(Book book, int updateId) {
+        booksList = booksList.stream().map(bk -> {
+            if (bk.getId() == updateId) {
+                bk = book;
             }
             return bk;
         }).collect(Collectors.toList());
