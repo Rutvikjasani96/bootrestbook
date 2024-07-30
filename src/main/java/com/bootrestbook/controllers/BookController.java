@@ -5,7 +5,6 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -47,9 +46,8 @@ public class BookController {
         Book bk = null;
         try {
             bk = bookService.addBook(book);
-            return ResponseEntity.of(Optional.of(bk));
+            return ResponseEntity.status(HttpStatus.CREATED).body(bk);
         } catch (Exception e) {
-            // TODO: handle exception
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
@@ -60,7 +58,6 @@ public class BookController {
             bookService.deleteBook(deleteId);
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         } catch (Exception e) {
-            // TODO: handle exception
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
@@ -72,7 +69,6 @@ public class BookController {
             bookService.updateBook(book, updateId);
             return ResponseEntity.of(Optional.of(book));
         } catch (Exception e) {
-            // TODO: handle exception
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
